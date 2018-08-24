@@ -18,6 +18,20 @@ public class SkipListNode{
     this(null, null, null, null, null);
   }
 
+  public boolean isEnd(){//returns true if this Node is end of its list
+    if(right == null){
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isStart(){//returns true if this Node is the start of its list
+    if(left == null){
+      return true;
+    }
+    return false;
+  }
+
   public static void main(String[] args){
     SkipListNode test = new SkipListNode();
   }
