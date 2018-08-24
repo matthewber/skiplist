@@ -14,6 +14,10 @@ public class SkipListNode{
     this.down = down;
   }
 
+  public SkipListNode(String item){
+    this(item, null, null, null, null);
+  }
+
   public SkipListNode(){
     this(null, null, null, null, null);
   }
@@ -30,6 +34,13 @@ public class SkipListNode{
       return true;
     }
     return false;
+  }
+
+  public boolean isUp(){//returns true if this Node is also on the level one up from it
+    if(up == null){
+      return false;
+    }
+    return true;
   }
 
   public static void main(String[] args){
