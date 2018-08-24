@@ -1,12 +1,12 @@
-public class SkipListNode <E>{
+public class SkipListNode{
 
   public SkipListNode left;
   public SkipListNode right;
   public SkipListNode up;
   public SkipListNode down;
-  public E item;
+  public String item;
 
-  public SkipListNode(E item, SkipListNode left, SkipListNode right, SkipListNode up, SkipListNode down){
+  public SkipListNode(String item, SkipListNode left, SkipListNode right, SkipListNode up, SkipListNode down){
     this.item = item;
     this.left = left;
     this.right = right;
