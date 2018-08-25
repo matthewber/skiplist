@@ -42,6 +42,7 @@ public class SkipList{
       SkipListNode nextElement = head; //used to iterate through the bottom level of the list
       //find spot to insert element
       while(node.item.compareTo(nextElement.item) > 0){
+        System.out.println("HEREEEE");
         //continue until spot found
         //if to be appended to end of list, nullify nextElement;
         if(nextElement.isEnd()){
@@ -56,21 +57,22 @@ public class SkipList{
         insertSpot = nextElement;
       }
       //continue iterating until element found or end of list
-      while(nextElement.right != null){
-        if(nextElement.up != null){
-          nextUp = nextElement.up;
-          break;
+      if(nextElement != null){
+        while(nextElement.right != null){
+          if(nextElement.up != null){
+            nextUp = nextElement.up;
+            break;
+          }
+          nextElement = nextElement.right;
         }
-        nextElement = nextElement.right;
       }
-
       //add node to spot before insertSpot
       //if insertSpot.right == null then insert to end of list
       if(nextElement == null){//if to be appended to end
         //in this case insertSpot points to the last element
         node.left = insertSpot;
         insertSpot.right = node;
-      }else if(nextElement.isStart()){
+      }else if(insertSpot == head){
         node.right = insertSpot;
         insertSpot.left = node;
       }else{
@@ -94,18 +96,46 @@ public class SkipList{
           newNode.right = nextUp;
           nextUp.left = newNode;
         }
-
         //update nextUp and lastUp for this new level
+        SkipListNode nodePointer = newNode;
+        nextUp = null;
+        while(nodePointer.right != null){
+          if(nodePointer.right.up != null){
+            nextUp = nodePointer.right.up;
+            break;
+          }
+          nodePointer = nodePointer.right;
+        }
+        nodePointer = newNode;
+        lastUp = null;
+        while(nodePointer.left != null){
+          if(nodePointer.left.up != null){
+            lastUp = nodePointer.left.up;
+            break;
+          }
+          nodePointer = nodePointer.left;
+        }
+
       }
 
 
     }
   }
 
+  public void printBottomRow(){//used for testing purposes
+    SkipListNode i = head;
+    while(i != null){
+      System.out.println(i.item);
+      i = i.right;
+    }
+  }
+
   public static void main(String[] args){ //used for testing purposes
     SkipList test = new SkipList();
     SkipListNode testNode = new SkipListNode("test pass", null, null, null, null);
-    SkipListNode testNode2 = new SkipListNode("atest pass", null, null, null, null);
+    SkipListNode testNode2 = new SkipListNode("zzzz", null, null, null, null);
+    SkipListNode testNode3 = new SkipListNode("zazz", null, null, null, null);
+    SkipListNode testNode4 = new SkipListNode("zzaz", null, null, null, null);
     test.insert(testNode);
     test.insert(testNode2);
     boolean empt = test.isEmpty();
@@ -115,5 +145,6 @@ public class SkipList{
     System.out.println(coinTest);
     coinTest = flipCoin();
     System.out.println(coinTest);
+    test.printBottomRow();
   }
 }
