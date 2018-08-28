@@ -60,14 +60,15 @@ public class SkipList{
     }else{
       if(node.item.compareTo(head.item) < 0){
         insertFrontOfList(node);
-      }
-      SkipListNode i = head; //used to iterate through the bottom level of the list
-      for(;;){
-        if(i.right == null || (i.right.item.compareTo(node.item) > 0)){
-          insertBottomRow(node, i);
-          break;
+      }else{
+        SkipListNode i = head; //used to iterate through the bottom level of the list
+        for(;;){
+          if(i.right == null || (i.right.item.compareTo(node.item) > 0)){
+            insertBottomRow(node, i);
+            break;
+          }
+          i = i.right;
         }
-        i = i.right;
       }
     }
   }
@@ -82,6 +83,42 @@ public class SkipList{
     }
   }
 
+  public void updateHigherLevels(SkipListNode deleted){//only called if deleted.up exists
+    if(deleted.up == null){
+      System.err.println("updateHigherLevels() called incorrectly - no higher levels exist");
+      return;
+    }
+
+  }
+
+  public void delete(String item){
+    SkipListNode curr = head;
+    for(;;){
+      if(curr.item == item){
+        if(curr == head && curr.right == null){
+          head = null;
+        }else if(curr.left == null){
+          //delete from front of list
+          head = head.right;
+          head.left = null;
+        }else if(curr.right == null){
+          curr.left.right = null;
+        }else{
+          curr.left.right = curr.right;
+          curr.right.left = curr.left;
+        }
+        if(curr.up != null){
+          updateHigherLevels(curr);
+        }
+        break;
+      }
+      if(curr.right == null){
+        break; //item not found
+      }
+      curr = curr.right;
+    }
+  }
+
   public static void main(String[] args){ //used for testing purposes
     SkipList test = new SkipList();
     SkipListNode testNode = new SkipListNode("test pass", null, null, null, null);
@@ -91,7 +128,9 @@ public class SkipList{
     test.insert(testNode);
     test.insert(testNode2);
     test.insert(testNode3);
-    //test.insert(testNode4);
+    test.insert(testNode4);
+    test.delete("aaa");
+    test.delete("test pass");
     boolean empt = test.isEmpty();
     boolean coinTest = flipCoin();
     System.out.println(coinTest);
