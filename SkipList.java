@@ -30,8 +30,48 @@ public class SkipList{
     return false;
   }
 
-  public void addToHigherLevels(SkipListNode node){
 
+  public void addToHigherLevels(SkipListNode node){
+    if(flipCoin()){//only add node to higher levels sometimes
+      return;
+    }
+    if(node == null){
+      System.err.println("Error: null passed to addToHigherLevels()");
+      return;
+    }
+
+    SkipListNode higherLevel = new SkipListNode(node.item);
+    node.up = higherLevel;
+    higherLevel.down = node;
+
+    SkipListNode traversal = node;
+    while(traversal.left != null){
+      if(traversal.left.up != null){
+        lastUp(traversal.left.up, node.up);
+        break;
+      }
+      traversal = traversal.left;
+    }
+    traversal = node;
+    while(traversal.right != null){
+      if(traversal.right.up != null){
+        nextUp(traversal.right.up, node.up);
+        break;
+      }
+      traversal = traversal.right;
+    }
+
+    addToHigherLevels(higherLevel);
+  }
+
+  public void lastUp(SkipListNode lUp, SkipListNode node){
+    lUp.right = node;
+    node.left = lUp;
+  }
+
+  public void nextUp(SkipListNode nUp, SkipListNode node){
+    nUp.left = node;
+    node.right = nUp;
   }
 
   private void insertFrontOfList(SkipListNode node){
@@ -79,11 +119,14 @@ public class SkipList{
     SkipListNode i = head;
     while(i != null){
       System.out.println(i.item);
+      if(i.up != null){
+        System.out.println("up");
+      }
       i = i.right;
     }
   }
 
-  public void updateHigherLevels(SkipListNode deleted){//only called if deleted.up exists
+  public void deleteHigherLevels(SkipListNode deleted){//only called if deleted.up exists
     if(deleted.up == null){
       System.err.println("updateHigherLevels() called incorrectly - no higher levels exist");
       return;
@@ -108,7 +151,7 @@ public class SkipList{
           curr.right.left = curr.left;
         }
         if(curr.up != null){
-          updateHigherLevels(curr);
+          deleteHigherLevels(curr);
         }
         break;
       }
@@ -130,7 +173,6 @@ public class SkipList{
     test.insert(testNode3);
     test.insert(testNode4);
     test.delete("aaa");
-    test.delete("test pass");
     boolean empt = test.isEmpty();
     boolean coinTest = flipCoin();
     System.out.println(coinTest);
