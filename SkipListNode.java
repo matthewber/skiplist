@@ -6,20 +6,26 @@ public class SkipListNode{
   public SkipListNode down;
   public String item;
 
-  public SkipListNode(String item, SkipListNode left, SkipListNode right, SkipListNode up, SkipListNode down){
-    this.item = item;
-    this.left = left;
-    this.right = right;
-    this.up = up;
-    this.down = down;
-  }
-
   public SkipListNode(String item){
-    this(item, null, null, null, null);
+    this.item = item;
   }
 
   public SkipListNode(){
-    this(null, null, null, null, null);
+    this(null);
+  }
+
+  public boolean isSingle(){//returns true if this Node is the only node on its level
+    if(right == null && left == null){
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isMiddle(){//returns true if Node has nodes on either side of it
+    if(right != null && left != null){
+      return true;
+    }
+    return false;
   }
 
   public boolean isEnd(){//returns true if this Node is end of its list
@@ -41,6 +47,30 @@ public class SkipListNode{
       return false;
     }
     return true;
+  }
+
+  public boolean isEqual(String compare){
+    if(item == null){
+      return false;
+    }else{
+      if(compare.compareTo(item) == 0){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  }
+
+  public boolean isBigger(String name){//returns true if the node containing name should appear after this node
+    if(item == null){
+      return false;
+    }else{
+      if(name.compareTo(item) > 0){
+        return true;
+      }else{
+        return false;
+      }
+    }
   }
 
   public static void main(String[] args){
