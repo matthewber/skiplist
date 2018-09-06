@@ -4,7 +4,7 @@ public class SkipList{
 
   private SkipListNode head;
   int num_levels = 1;
-  private static int MAX_NUM_LEVELS = 10;
+  private static int MAX_NUM_LEVELS = 15;
 
   public SkipList(SkipListNode head){
     this.head = head;
@@ -42,8 +42,8 @@ public class SkipList{
   * recursively adds a node to higher levels
   * @param SkipListNode node to be added
   */
-  private void addToHigherLevels(SkipListNode node){
-    if(flipCoin()){//only add node to higher levels sometimes
+  private void addToHigherLevels(SkipListNode node, int currLevel){
+    if(flipCoin() || currLevel >= MAX_NUM_LEVELS){//only add node to higher levels sometimes
       return;
     }
     if(node == null){
@@ -73,7 +73,7 @@ public class SkipList{
       traversal = traversal.right;
     }
 
-    addToHigherLevels(higherLevel);
+    addToHigherLevels(higherLevel, currLevel+1);
   }
 
   /**
@@ -107,7 +107,7 @@ public class SkipList{
     head.left = node;
     node.right = head;
     head = node;
-    addToHigherLevels(node);
+    addToHigherLevels(node, 1);
   }
 
   /**
@@ -126,7 +126,7 @@ public class SkipList{
       location.right = node;
       node.left = location;
     }
-    addToHigherLevels(node);
+    addToHigherLevels(node, 1);
   }
 
   /**
@@ -316,22 +316,22 @@ public class SkipList{
 
   public static void main(String[] args){ //used for testing purposes
     SkipList test = new SkipList();
-    SkipListNode testNode = new SkipListNode("test pass");
-    SkipListNode testNode2 = new SkipListNode("zzzz");
-    SkipListNode testNode3 = new SkipListNode("abc");
-    SkipListNode testNode4 = new SkipListNode("aaa");
-    test.insert(testNode);
-    test.insert(testNode2);
-    test.insert(testNode3);
-    test.insert(testNode4);
-    test.delete("abc");
-    boolean empt = test.isEmpty();
-    boolean coinTest = flipCoin();
-    System.out.println(coinTest);
-    coinTest = flipCoin();
-    System.out.println(coinTest);
-    coinTest = flipCoin();
-    System.out.println(coinTest);
-    test.printBottomRow();
+    //SkipListNode testNode = new SkipListNode("test pass");
+    //SkipListNode testNode2 = new SkipListNode("zzzz");
+    //SkipListNode testNode3 = new SkipListNode("abc");
+    //SkipListNode testNode4 = new SkipListNode("aaa");
+    //test.insert(testNode);
+    //test.insert(testNode2);
+    //test.insert(testNode3);
+    //test.insert(testNode4);
+    //test.delete("abc");
+    //boolean empt = test.isEmpty();
+    //boolean coinTest = flipCoin();
+    //System.out.println(coinTest);
+    //coinTest = flipCoin();
+    //System.out.println(coinTest);
+    //coinTest = flipCoin();
+    //System.out.println(coinTest);
+    //test.printBottomRow();
   }
 }
