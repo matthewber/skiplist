@@ -41,9 +41,10 @@ public class SkipList{
   * addToHigherLevels() is a helper function for insert()
   * recursively adds a node to higher levels
   * @param SkipListNode node to be added
+  * @param allLevels flag set to true if node is to be inserted into all higher levels
   */
-  private void addToHigherLevels(SkipListNode node, int currLevel){
-    if(flipCoin() || currLevel >= MAX_NUM_LEVELS){//only add node to higher levels sometimes
+  private void addToHigherLevels(SkipListNode node, int currLevel, boolean allLevels){
+    if(!allLevels || flipCoin() || currLevel >= MAX_NUM_LEVELS){//only add node to higher levels sometimes
       return;
     }
     if(node == null){
@@ -73,7 +74,7 @@ public class SkipList{
       traversal = traversal.right;
     }
 
-    addToHigherLevels(higherLevel, currLevel+1);
+    addToHigherLevels(higherLevel, currLevel+1, allLevels);
   }
 
   /**
@@ -98,6 +99,7 @@ public class SkipList{
     node.right = nUp;
   }
 
+
   /**
   * insertFrontOfList() is a helped function for insert()
   * inserts a node into the front of the list
@@ -107,7 +109,35 @@ public class SkipList{
     head.left = node;
     node.right = head;
     head = node;
-    addToHigherLevels(node, 1);
+    updateHeadLevels();
+    //addToHigherLevels(node, 1, true);
+  }
+
+  /**
+  * updateHeadLevels() is a helper function for insertFrontOfList()
+  * ensures that the head is present on all levels of the list
+  */
+  private void updateHeadLevels(){
+    SkipListNode pointer = head;
+    int level = 1;
+    while(pointer.up != null){
+      pointer = pointer.up;
+      level++;
+    }
+    updateHeadLevels(pointer, level);
+  }
+
+  private void updateHeadLevels(SkipListNode node, int level){
+    if(node.up != null){
+      System.err.println("error: incorrect call of updateHeadLevels()");
+    }
+    while(level < MAX_NUM_LEVELS){
+      SkipListNode up = new SkipListNode(node.item);
+      node.up = up;
+      level++;
+      node = node.up;
+    }
+
   }
 
   /**
@@ -126,7 +156,7 @@ public class SkipList{
       location.right = node;
       node.left = location;
     }
-    addToHigherLevels(node, 1);
+    addToHigherLevels(node, 1, false);
   }
 
   /**
