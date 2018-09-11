@@ -163,6 +163,11 @@ public class SkipList{
   * insert() inserts a node into the list
   * @param SkipListNode node to be inserted
   */
+  public void insert(String name){
+    SkipListNode node = new SkipListNode(name);
+    insert(node);
+  }
+
   public void insert(SkipListNode node){
     if(isEmpty()){
       this.head = node;
